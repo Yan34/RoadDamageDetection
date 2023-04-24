@@ -4,6 +4,7 @@ import re
 import cv2
 import numpy as np
 
+annotation_id = 0
 
 def find_contours(sub_mask):
     _, thresh = cv2.threshold(sub_mask, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
@@ -75,8 +76,6 @@ class CocoDataset:
 
 
 def process_image_and_masks(src_dir, dest_dir, ann_file: CocoDataset):
-    annotation_id = 0
-
     for img in os.listdir(src_dir):
         image_id = int(img.split("_")[0])
         IMG_PATH = os.path.join(src_dir, img)
@@ -98,6 +97,7 @@ def process_image_and_masks(src_dir, dest_dir, ann_file: CocoDataset):
                 assert category_id > 0
                 contours = find_contours(image)
                 for contour in contours:
+                    global annotation_id
                     annotation = CocoAnnotation(annotation_id, image_id, category_id, contour)
                     if annotation.area > 0:
                         ann_file.annotations.append(annotation.get_as_dict())
