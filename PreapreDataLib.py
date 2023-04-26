@@ -88,20 +88,21 @@ def process_image_and_masks(src_dir, dest_dir, ann_file: CocoDataset):
         else:
             if cv2.countNonZero(image) != 0:
                 category_id = 0
-                if re.match(".*CRACK.*", img):
-                    category_id = next(item for item in ann_file.categories if item["name"] == "crack")["id"]
-                if re.match(".*POTHOLE.*", img):
-                    category_id = next(item for item in ann_file.categories if item["name"] == "pothole")["id"]
-                if re.match(".*LANE.*", img):
-                    category_id = next(item for item in ann_file.categories if item["name"] == "lane")["id"]
-                assert category_id > 0
-                contours = find_contours(image)
-                for contour in contours:
-                    global annotation_id
-                    annotation = CocoAnnotation(annotation_id, image_id, category_id, contour)
-                    if annotation.area > 0:
-                        ann_file.annotations.append(annotation.get_as_dict())
-                        annotation_id += 1
+                if not re.match(".*LANE.*", img):
+                    if re.match(".*CRACK.*", img):
+                        category_id = next(item for item in ann_file.categories if item["name"] == "crack")["id"]
+                    if re.match(".*POTHOLE.*", img):
+                        category_id = next(item for item in ann_file.categories if item["name"] == "pothole")["id"]
+                    # if re.match(".*LANE.*", img):
+                    #     category_id = next(item for item in ann_file.categories if item["name"] == "lane")["id"]
+                    assert category_id > 0
+                    contours = find_contours(image)
+                    for contour in contours:
+                        global annotation_id
+                        annotation = CocoAnnotation(annotation_id, image_id, category_id, contour)
+                        if annotation.area > 0:
+                            ann_file.annotations.append(annotation.get_as_dict())
+                            annotation_id += 1
 
 
 def create_folder_if_not_exists(path):
