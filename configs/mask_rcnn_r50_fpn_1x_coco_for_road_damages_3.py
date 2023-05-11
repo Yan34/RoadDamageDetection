@@ -117,13 +117,13 @@ model = dict(
             max_per_img=300,
             mask_thr_binary=0.5)))
 dataset_type = 'CocoDataset'
-data_root = './DatasetCocoFormat/'
+data_root = './DatasetCocoFormat1200/'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations', with_bbox=True, with_mask=True),
-    dict(type='Resize', img_scale=(640, 320), keep_ratio=True),
+    dict(type='Resize', img_scale=(512, 320), keep_ratio=True),
     dict(type='RandomFlip', flip_ratio=0.5),
     dict(
         type='Normalize',
@@ -138,7 +138,7 @@ test_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(
         type='MultiScaleFlipAug',
-        img_scale=(640, 320),
+        img_scale=(512, 320),
         flip=False,
         transforms=[
             dict(type='Resize', keep_ratio=True),
@@ -158,12 +158,12 @@ data = dict(
     workers_per_gpu=1,
     train=dict(
         type='CocoDataset',
-        ann_file='./DatasetCocoFormat/annotations/train.json',
-        img_prefix='./DatasetCocoFormat/train/',
+        ann_file='./DatasetCocoFormat1200/annotations/train.json',
+        img_prefix='./DatasetCocoFormat1200/train/',
         pipeline=[
             dict(type='LoadImageFromFile'),
             dict(type='LoadAnnotations', with_bbox=True, with_mask=True),
-            dict(type='Resize', img_scale=(640, 320), keep_ratio=True),
+            dict(type='Resize', img_scale=(512, 320), keep_ratio=True),
             dict(type='RandomFlip', flip_ratio=0.5),
             dict(
                 type='Normalize',
@@ -179,13 +179,13 @@ data = dict(
         classes=('crack', 'pothole')),
     val=dict(
         type='CocoDataset',
-        ann_file='./DatasetCocoFormat/annotations/val.json',
-        img_prefix='./DatasetCocoFormat/val/',
+        ann_file='./DatasetCocoFormat1200/annotations/val.json',
+        img_prefix='./DatasetCocoFormat1200/val/',
         pipeline=[
             dict(type='LoadImageFromFile'),
             dict(
                 type='MultiScaleFlipAug',
-                img_scale=(640, 320),
+                img_scale=(512, 320),
                 flip=False,
                 transforms=[
                     dict(type='Resize', keep_ratio=True),
@@ -203,13 +203,13 @@ data = dict(
         classes=('crack', 'pothole')),
     test=dict(
         type='CocoDataset',
-        ann_file='./DatasetCocoFormat/annotations/test.json',
-        img_prefix='./DatasetCocoFormat/test/',
+        ann_file='./DatasetCocoFormat1200/annotations/test.json',
+        img_prefix='./DatasetCocoFormat1200/test/',
         pipeline=[
             dict(type='LoadImageFromFile'),
             dict(
                 type='MultiScaleFlipAug',
-                img_scale=(640, 320),
+                img_scale=(512, 320),
                 flip=False,
                 transforms=[
                     dict(type='Resize', keep_ratio=True),

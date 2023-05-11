@@ -76,21 +76,19 @@ class CocoDataset:
 
 
 def process_image_and_masks(src_dir, dest_dir, ann_file: CocoDataset):
+    any_ann_added = False
     for img in os.listdir(src_dir):
         image_id = int(img.split("_")[0])
         IMG_PATH = os.path.join(src_dir, img)
         image = cv2.imread(IMG_PATH, cv2.IMREAD_GRAYSCALE)
-        if re.match(".*RAW.*", img):
-            height, width = image.shape
-            image_coco = CocoImage(image_id, width, height, img)
-            ann_file.images.append(image_coco.get_as_dict())
-            shutil.copy(IMG_PATH, dest_dir)
-        else:
+        if not re.match(".*RAW.*", img):
             if cv2.countNonZero(image) != 0:
                 category_id = 0
+                min_area = 20
                 if not re.match(".*LANE.*", img):
                     if re.match(".*CRACK.*", img):
                         category_id = next(item for item in ann_file.categories if item["name"] == "crack")["id"]
+                        min_area = 700
                     if re.match(".*POTHOLE.*", img):
                         category_id = next(item for item in ann_file.categories if item["name"] == "pothole")["id"]
                     # if re.match(".*LANE.*", img):
@@ -100,9 +98,17 @@ def process_image_and_masks(src_dir, dest_dir, ann_file: CocoDataset):
                     for contour in contours:
                         global annotation_id
                         annotation = CocoAnnotation(annotation_id, image_id, category_id, contour)
-                        if annotation.area > 0:
+                        if annotation.area > min_area:
                             ann_file.annotations.append(annotation.get_as_dict())
                             annotation_id += 1
+                            any_ann_added = True
+        elif re.match(".*RAW.*", img):
+            if any_ann_added:
+                height, width = image.shape
+                image_coco = CocoImage(image_id, width, height, img)
+                ann_file.images.append(image_coco.get_as_dict())
+                shutil.copy(IMG_PATH, dest_dir)
+    return any_ann_added
 
 
 def create_folder_if_not_exists(path):
