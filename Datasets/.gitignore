@@ -1,0 +1,5 @@
+*
+!.gitignore
+!/DatasetCocoFormat1200/
+!/DatasetCocoFormat1200/*
+!/DatasetCocoFormat1200/*/*

@@ -1,0 +1,7 @@
+*
+!.gitignore
+!mask_rcnn_r50_fpn_1x_coco.py
+!mask_rcnn_r50_fpn_1x_coco_for_road_damages_3.py
+!mask_rcnn_r50_fpn_1x_coco_for_road_damages_3.log.json
+!mask_rcnn_r50_fpn_1x_coco_for_road_damages_5.py
+!mask_rcnn_r50_fpn_1x_coco_for_road_damages_5.log.json
